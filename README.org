@@ -1,0 +1,6 @@
+* An Introduction to Programming in Emacs lisp
+
+This repo has my solutions for the inbuild emacs lisp tutorial. It
+doesn't start from section 1 or something similar because I realised I
+would like to have this repo while going through section 4. Hence this
+is where it starts.
