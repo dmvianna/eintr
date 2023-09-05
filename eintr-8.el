@@ -28,7 +28,6 @@ Optionally skip COUNT occurrences.  If COUNT is negative,
 reverse searches from the end of the accessible region."
   (interactive "p\nsTarget text: ")
   (goto-char (if (< count 0) (point-max) (point-min)))
-  ;; if search-forward crashes, we recover with message
   (if (search-forward text nil t count)
       (message "Found!")
     (message "Not found: %s" text)))
