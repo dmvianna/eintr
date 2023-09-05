@@ -40,4 +40,3 @@ reverse searches from the end of the accessible region."
     (message (car (nthcdr 3 kill-ring)))))
 
 ;;; eintr-8.el ends here
-(search-forward "hoho" nil (message "not found"))
