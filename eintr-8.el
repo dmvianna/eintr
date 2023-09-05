@@ -21,11 +21,18 @@
 
 ;;; Code:
 
-(defun test-search ()
-  "Leave the point after the word being searched."
-  (message "Found!"))
+(defun my/test-search (count text)
+  "Leave the point after the TEXT being searched.
+Always searches from the beginning of the accessible region.
+Optionally skip COUNT occurrences."
+  (interactive "p\nsTarget text: ")
+  (goto-char (point-min))
+  ;; if search-forward crashes, we recover with message
+  (if (search-forward text nil t count)
+      (message "Found!")
+    (message "Not found: %s" text)))
 
-(defun third-element ()
+(defun my/third-element ()
   "Display the third element of the kill ring."
   (interactive)
   (if (< (length kill-ring) 3)
@@ -33,3 +40,4 @@
     (message (car (nthcdr 3 kill-ring)))))
 
 ;;; eintr-8.el ends here
+(search-forward "hoho" nil (message "not found"))
