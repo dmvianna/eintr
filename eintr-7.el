@@ -17,7 +17,7 @@
 (setq birds (cons "chicken"
                   (cons "cockatoo"
                         (cons "condor"
-                              (cons"penguin" ())))))
+                              (cons "penguin" ())))))
 
 (cons birds birds)
 
