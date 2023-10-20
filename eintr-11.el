@@ -36,17 +36,20 @@ by the NUMBER-OF-ROWS so far."
 ;; • Rewrite these two functions recursively.  Rewrite these functions
 ;; using ‘cond’.
 
-(defun multiply-by-total-recursively (number-of-rows &optional total)
+(defun multiply-by-total-recursively
+    (number-of-rows &optional counter total)
   "Total pebbles in a pyramid.
-Each row contains the total count of pebbles multiplied
-by the NUMBER-OF-ROWS so far.  Optionally set initial TOTAL."
+Each row contains the total count of pebbles multiplied by the
+NUMBER-OF-ROWS so far.  Optionally set initial COUNTER and TOTAL."
   (let ((total (if total total 1))
-        (row-number 1))
+        (counter (if counter counter 1)))
     (cond
-     ((= number-of-rows 1) 1)
-     ((> number-of-rows 1)
-      (* number-of-rows
-         (multiply-by-total-recursively (1- number-of-rows) total))))))
+     ((> counter number-of-rows) total)
+     (t
+      (multiply-by-total-recursively
+       number-of-rows
+       (1+ counter)
+       (* counter total))))))
 
 (ert-deftest test-multiply-by-total-recursively ()
   "Tests `multiply-by-total-recursively' results."
