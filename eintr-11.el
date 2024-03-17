@@ -63,13 +63,71 @@ NUMBER-OF-ROWS so far.  Optionally set initial COUNTER and TOTAL."
 ;; the beginning of a paragraph for every ‘@dfn’ within the paragraph.
 ;; (In a Texinfo file, ‘@dfn’ marks a definition.  This book is
 ;;     written in Texinfo.)
-
+;;
 ;; Many of the functions you will need are described in two of the
 ;; previous chapters, *note Cutting and Storing Text: Cutting &
 ;; Storing Text, and *note Yanking Text Back: Yanking.  If you use
 ;; ‘forward-paragraph’ to put the index entry at the beginning of the
 ;; paragraph, you will have to use ‘C-h f’ (‘describe-function’) to
 ;; find out how to make the command go backwards.
+
+;; 1. narrow to a target paragraph
+;; 2. save-excursion: we don't want to change the paragraph itself
+;;    and need to return to beginning of paragraph.
+;; 3. search-forward regex
+;; 4. drop mark
+;; 5. search-backward regex
+;; 6. copy text
+;; 7. add text to index text
+;; 8. goto mark
+;; 9. continue from 3. until we get to point-max
+;; 10. add index to point-min
+;; 11. reset narrowing and set to next paragraph.
+;; 12. If we're at point-max of unnarrowed buffer, done.
+;;
+
+(defun re-seq (regexp string &optional num)
+  "Get a list of all REGEXP matches in a STRING.
+Optionally choose which NUM regex parenthesised
+sub-expression to return."
+  (save-match-data
+    (let ((pos 0)
+          matches)
+      (while (string-match regexp string pos)
+        (push (match-string num string) matches)
+        (setq pos (match-end 0)))
+      matches)))
+
+(ert-deftest test/re-seq ()
+  "Tests `re-seq'."
+  (should (equal (re-seq "@dfn{\\(.+\\)}" "@dfn{haha}" 1) '("haha"))))
+
+(defun my/index-texinfo-dfn ()
+  "Create an index entry for every @dfn in a paragraph, recursively.
+One paragraph."
+  (interactive)
+  (let ((beg-paragraph (point))
+        (end-paragraph)
+        (matches))
+    (forward-paragraph)
+    (setq end-paragraph (point))
+    (message (format "%s %s" beg-paragraph (point)))
+    (with-restriction beg-paragraph end-paragraph
+      (setq matches
+            (re-seq "@dfn{\\(.+\\)}" (buffer-string) 1)))
+    (goto-char beg-paragraph)
+    (skip-chars-forward "[:blank:]\n")
+    (dolist (elt matches)
+      (insert (concat "@cindex " elt "\n"))
+      (insert "\n"))
+    (forward-paragraph)))
+
+(defun my/index-texinfo-paragraph ()
+  "Read a PARAGRAPH and insert index of texinfo @dfn before it.
+Buffer-wide."
+  (interactive)
+  (while (< (point) (point-max))
+    (my/index-texinfo-dfn)))
 
 ;; For more information, see *note Indicating Definitions:
 ;; (texinfo)Indicating.
