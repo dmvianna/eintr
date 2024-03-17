@@ -117,7 +117,7 @@ One paragraph."
             (re-seq "@dfn{\\(.+\\)}" (buffer-string) 1)))
     (goto-char beg-paragraph)
     (skip-chars-forward "[:blank:]\n")
-    (dolist (elt matches)
+    (dolist (elt (reverse matches))
       (insert (concat "@cindex " elt "\n")))
     (if matches (insert "\n"))
     (forward-paragraph)))
