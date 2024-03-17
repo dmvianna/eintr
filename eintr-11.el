@@ -27,6 +27,7 @@ by the NUMBER-OF-ROWS so far."
       (setq row-number (1+ row-number)))
     total))
 
+;; ert tests can be run using M-x ert-run-tests-interactively
 (ert-deftest test-multiply-by-total ()
   "Tests `multiply-by-total' results."
   (should (equal (multiply-by-total 1) 1))
@@ -51,6 +52,7 @@ NUMBER-OF-ROWS so far.  Optionally set initial COUNTER and TOTAL."
        (1+ counter)
        (* counter total))))))
 
+;; ert tests can be run using M-x ert-run-tests-interactively
 (ert-deftest test-multiply-by-total-recursively ()
   "Tests `multiply-by-total-recursively' results."
   (should (equal (multiply-by-total-recursively 1) 1))
