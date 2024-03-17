@@ -118,8 +118,8 @@ One paragraph."
     (goto-char beg-paragraph)
     (skip-chars-forward "[:blank:]\n")
     (dolist (elt matches)
-      (insert (concat "@cindex " elt "\n"))
-      (insert "\n"))
+      (insert (concat "@cindex " elt "\n")))
+    (if matches (insert "\n"))
     (forward-paragraph)))
 
 (defun my/index-texinfo-paragraph ()
