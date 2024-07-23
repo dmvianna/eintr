@@ -135,8 +135,9 @@ One paragraph."
   "Read a PARAGRAPH and insert index of texinfo @dfn before it.
 Buffer-wide."
   (interactive)
-  (while (< (point) (point-max))
-    (my/index-texinfo-dfn)))
+  (save-excursion
+    (while (< (point) (point-max))
+                (my/index-texinfo-dfn))))
 
 (ert-deftest test/my/index-texinfo ()
   "Tests the buffer commands."
