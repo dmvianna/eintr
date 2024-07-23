@@ -136,6 +136,7 @@ One paragraph."
 Buffer-wide."
   (interactive)
   (save-excursion
+    (goto-char (point-min))
     (while (< (point) (point-max))
                 (my/index-texinfo-dfn))))
 
