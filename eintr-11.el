@@ -91,7 +91,7 @@ NUMBER-OF-ROWS so far.  Optionally set initial COUNTER and TOTAL."
 (defun re-seq (regexp string &optional num)
   "Get a list of all REGEXP matches in a STRING.
 Optionally choose which NUM regex parenthesised
-sub-expression to return."
+sub-expression to return.  Values returned are unique."
   (save-match-data
     (let ((pos 0)
           (numb (if num num 0))
