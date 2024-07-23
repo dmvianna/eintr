@@ -1,0 +1,13 @@
+Name: test/my/index-texinfo-dfn
+
+=-=
+
+this is my @dfn{paragraph}
+
+=-=
+
+@cindex @dfn{paragraph}
+
+this is my @dfn{paragraph}
+
+=-=-=
