@@ -107,7 +107,7 @@ sub-expression to return."
   (should (equal (re-seq "@dfn{\\([^}]+\\)}" "@dfn{ha} @dfn{ha}" 1) '("ha")))
   (should
    (equal
-    (re-seq "@dfn{\\([^}]+\\)}" "@dfn{haha} @dfn{hoho}"1)
+    (re-seq "@dfn{\\([^}]+\\)}" "@dfn{haha} @dfn{hoho}" 1)
     '("hoho" "haha"))))
 
 (defun my/index-texinfo-dfn ()
