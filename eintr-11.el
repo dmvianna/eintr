@@ -99,11 +99,16 @@ sub-expression to return."
       (while (string-match regexp string pos)
         (push (match-string numb string) matches)
         (setq pos (match-end 0)))
-      matches)))
+      (cl-remove-duplicates matches :test #'equal))))
 
 (ert-deftest test/re-seq ()
   "Tests `re-seq'."
-  (should (equal (re-seq "@dfn{\\(.+\\)}" "@dfn{haha}" 1) '("haha"))))
+  (should (equal (re-seq "@dfn{\\([^}]+\\)}" "@dfn{haha}" 1) '("haha")))
+  (should (equal (re-seq "@dfn{\\([^}]+\\)}" "@dfn{ha} @dfn{ha}" 1) '("ha")))
+  (should
+   (equal
+    (re-seq "@dfn{\\([^}]+\\)}" "@dfn{haha} @dfn{hoho}"1)
+    '("hoho" "haha"))))
 
 (defun my/index-texinfo-dfn ()
   "Create an index entry for every @dfn in a paragraph, recursively.
@@ -117,7 +122,7 @@ One paragraph."
     (message (format "Searching paragraph from %s  to %s." beg-paragraph (point)))
     (with-restriction beg-paragraph end-paragraph
       (let ((matches
-             (re-seq "@dfn{\\(.+\\)}" (substring-no-properties (buffer-string)))))
+             (re-seq "@dfn{\\([^}]+\\)}" (substring-no-properties (buffer-string)))))
         (goto-char beg-paragraph)
         (skip-chars-forward "[:blank:]\n")
         (message (format "Matches are: %s" matches))
@@ -126,9 +131,6 @@ One paragraph."
         (if matches (insert "\n"))
         (forward-paragraph)))))
 
-(ert-test-erts-file "eintr-11.erts"
-                    (lambda () (my/index-texinfo-dfn)))
-
 (defun my/index-texinfo-paragraph ()
   "Read a PARAGRAPH and insert index of texinfo @dfn before it.
 Buffer-wide."
@@ -136,8 +138,10 @@ Buffer-wide."
   (while (< (point) (point-max))
     (my/index-texinfo-dfn)))
 
-(ert-test-erts-file "eintr-11.erts"
-                    (lambda () (my/index-texinfo-paragraph)))
+(ert-deftest test/my/index-texinfo ()
+  "Tests the buffer commands."
+  (ert-test-erts-file "eintr-11.erts"
+                      (lambda () (my/index-texinfo-paragraph))))
 
 ;; For more information, see *note Indicating Definitions:
 ;; (texinfo)Indicating.

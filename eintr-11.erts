@@ -2,12 +2,35 @@ Name: test/my/index-texinfo-dfn
 
 =-=
 
-this is my @dfn{paragraph}
+This is my @dfn{paragraph}.
 
 =-=
 
 @cindex @dfn{paragraph}
 
-this is my @dfn{paragraph}
+This is my @dfn{paragraph}.
+
+=-=-=
+
+Name: test/my/index-texinfo-paragraph
+
+=-=
+
+This is my @dfn{paragraph}.  It is a good
+@dfn{paragraph}. I @dfn{like} it.
+
+This @dfn{one}, on the other hand...
+
+=-=
+
+@cindex @dfn{paragraph}
+@cindex @dfn{like}
+
+This is my @dfn{paragraph}.  It is a good
+@dfn{paragraph}. I @dfn{like} it.
+
+@cindex @dfn{one}
+
+This @dfn{one}, on the other hand...
 
 =-=-=
