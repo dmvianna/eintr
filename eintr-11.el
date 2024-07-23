@@ -16,6 +16,8 @@
 ;; • Write a function similar to ‘triangle’ that multiplies instead of
 ;; adds the values.
 
+(setq-local debug-on-error t)
+
 (defun multiply-by-total (number-of-rows)
   "Total pebbles in a pyramid.
 Each row contains the total count of pebbles multiplied
@@ -92,9 +94,10 @@ Optionally choose which NUM regex parenthesised
 sub-expression to return."
   (save-match-data
     (let ((pos 0)
+          (numb (if num num 0))
           matches)
       (while (string-match regexp string pos)
-        (push (match-string num string) matches)
+        (push (match-string numb string) matches)
         (setq pos (match-end 0)))
       matches)))
 
@@ -111,16 +114,20 @@ One paragraph."
         (matches))
     (forward-paragraph)
     (setq end-paragraph (point))
-    (message (format "%s %s" beg-paragraph (point)))
+    (message (format "Searching paragraph from %s  to %s." beg-paragraph (point)))
     (with-restriction beg-paragraph end-paragraph
-      (setq matches
-            (re-seq "@dfn{\\(.+\\)}" (buffer-string) 1)))
-    (goto-char beg-paragraph)
-    (skip-chars-forward "[:blank:]\n")
-    (dolist (elt (reverse matches))
-      (insert (concat "@cindex " elt "\n")))
-    (if matches (insert "\n"))
-    (forward-paragraph)))
+      (let ((matches
+             (re-seq "@dfn{\\(.+\\)}" (substring-no-properties (buffer-string)))))
+        (goto-char beg-paragraph)
+        (skip-chars-forward "[:blank:]\n")
+        (message (format "Matches are: %s" matches))
+        (dolist (elt (reverse matches))
+          (insert (concat "@cindex " elt "\n")))
+        (if matches (insert "\n"))
+        (forward-paragraph)))))
+
+(ert-test-erts-file "eintr-11.erts"
+                    (lambda () (my/index-texinfo-dfn)))
 
 (defun my/index-texinfo-paragraph ()
   "Read a PARAGRAPH and insert index of texinfo @dfn before it.
@@ -128,6 +135,9 @@ Buffer-wide."
   (interactive)
   (while (< (point) (point-max))
     (my/index-texinfo-dfn)))
+
+(ert-test-erts-file "eintr-11.erts"
+                    (lambda () (my/index-texinfo-paragraph)))
 
 ;; For more information, see *note Indicating Definitions:
 ;; (texinfo)Indicating.
