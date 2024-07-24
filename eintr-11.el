@@ -138,7 +138,7 @@ Buffer-wide."
   (save-excursion
     (goto-char (point-min))
     (while (< (point) (point-max))
-                (my/index-texinfo-dfn))))
+           (my/index-texinfo-dfn))))
 
 (ert-deftest test/my/index-texinfo ()
   "Tests the buffer commands."
