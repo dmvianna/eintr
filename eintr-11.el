@@ -4,6 +4,10 @@
 ;;;
 ;;; Commentary:
 ;;;
+;;; Test with
+;;;
+;;; emacs -batch -l ert -l eintr-12.el -f ert-run-tests-batch-and-exit
+;;;
 
 ;; 11.4 Looping Exercise
 ;; =====================
